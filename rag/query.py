@@ -67,13 +67,13 @@ def answer_question_baseline(question: str, top_k: int = 5, collection_name: str
         print(f"  {i+1}. {chunk_id} (distance: {distance:.4f})")
 
     # Step 3: Call Cohere chat with RAG
-    print(f"\nGenerating answer with Cohere command-r-plus...")
+    print(f"\nGenerating answer with Cohere command-r-plus-08-2024...")
 
     # Format documents for Cohere chat
     formatted_docs = [{"text": doc} for doc in documents]
 
     response = co.chat(
-        model="command-r-plus",
+        model="command-r-plus-08-2024",
         message=question,
         documents=formatted_docs
     )
