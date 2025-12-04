@@ -15,22 +15,45 @@ from rag.query import answer_question
 load_dotenv()
 
 
-def get_chunk_texts(chunk_ids: list[str], collection_name: str = "nvidia_report") -> list[str]:
+def get_chunk_data(chunk_ids: list[str], collection_name: str = "nvidia_report") -> list[dict]:
     """
-    Retrieve the full text of chunks by their IDs.
+    Retrieve the full text and metadata of chunks by their IDs.
 
     Args:
         chunk_ids: List of chunk IDs to retrieve
         collection_name: ChromaDB collection name
 
     Returns:
-        List of chunk texts
+        List of dicts with text and metadata
     """
     client = chromadb.PersistentClient(path="./chroma_db")
     collection = client.get_collection(name=collection_name)
 
-    result = collection.get(ids=chunk_ids)
-    return result['documents']
+    result = collection.get(ids=chunk_ids, include=['documents', 'metadatas'])
+
+    chunks = []
+    for i, chunk_id in enumerate(chunk_ids):
+        chunks.append({
+            'id': chunk_id,
+            'text': result['documents'][i],
+            'metadata': result['metadatas'][i] if result['metadatas'] else {}
+        })
+
+    return chunks
+
+
+def estimate_tokens(text: str) -> int:
+    """
+    Estimate token count from text length.
+    Rule of thumb: ~4 characters per token for English text.
+
+    Args:
+        text: Text to estimate tokens for
+
+    Returns:
+        Estimated token count
+    """
+    return len(text) // 4
 
 
 def main():
@@ -40,48 +63,31 @@ def main():
         layout="wide"
     )
 
-    st.title("🤖 RAG Data-Readiness Tool")
-    st.markdown("**Powered by Cohere & ChromaDB**")
+    st.title("🤖 RAG Data-Readiness Comparison Tool")
+    st.markdown("**Side-by-Side Baseline vs Improved RAG Performance**")
     st.markdown("---")
 
     # Sidebar configuration
     st.sidebar.header("⚙️ Configuration")
-
-    # Mode selection
-    mode = st.sidebar.radio(
-        "Retrieval Mode",
-        options=["baseline", "improved"],
-        format_func=lambda x: {
-            "baseline": "Baseline (Simple Vector Retrieval)",
-            "improved": "Improved (Smart Chunks + Reranking)"
-        }[x],
-        index=0
-    )
-
     top_k = st.sidebar.slider("Number of chunks for answer", min_value=1, max_value=10, value=5)
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("### About")
-    if mode == "baseline":
-        st.sidebar.info(
-            "**Baseline Mode:**\n"
-            "- Simple word-based chunking\n"
-            "- Direct vector similarity retrieval\n"
-            "- Uses nvidia_report collection"
-        )
-    else:
-        st.sidebar.info(
-            "**Improved Mode:**\n"
-            "- Smart section-aware chunking\n"
-            "- Quality filtering\n"
-            "- Cohere Rerank for better relevance\n"
-            "- Uses nvidia_improved collection"
-        )
+    st.sidebar.info(
+        "**Baseline:**\n"
+        "- Simple word-based chunking\n"
+        "- Direct vector retrieval\n"
+        "\n"
+        "**Improved:**\n"
+        "- Smart section-aware chunking\n"
+        "- Quality filtering\n"
+        "- Cohere Rerank"
+    )
 
     # Check if database exists
     if not os.path.exists("./chroma_db"):
         st.error("⚠️ ChromaDB database not found!")
-        st.info("Please run `python rag/index_baseline.py` first to build the index.")
+        st.info("Please run `python rag/index_baseline.py` and `python rag/index_improved.py` first.")
         return
 
     # Check API key
@@ -99,10 +105,9 @@ def main():
         "What is NVIDIA's strategy for AI and data centers?"
     ]
 
-    cols = st.columns(2)
+    cols = st.columns(4)
     for i, question in enumerate(example_questions):
-        col = cols[i % 2]
-        if col.button(question, key=f"example_{i}"):
+        if cols[i].button(question, key=f"example_{i}", use_container_width=True):
             st.session_state.question = question
 
     st.markdown("---")
@@ -119,46 +124,90 @@ def main():
     )
 
     # Submit button
-    if st.button("🚀 Get Answer", type="primary"):
+    if st.button("🚀 Compare Both Modes", type="primary", use_container_width=True):
         if question:
-            with st.spinner("🔄 Processing your question..."):
-                try:
-                    # Call RAG system with selected mode
-                    answer, used_mode, chunk_ids = answer_question(question, mode=mode, top_k=top_k)
+            st.markdown("---")
 
-                    # Display answer
-                    st.markdown("---")
-                    st.markdown(f"### ✅ Answer (Mode: {used_mode.upper()})")
-                    st.success(answer)
+            # Create two columns for side-by-side comparison
+            col1, col2 = st.columns(2)
 
-                    # Display retrieved chunks
-                    st.markdown("---")
-                    st.markdown(f"### 📚 Retrieved Chunks ({len(chunk_ids)} sources)")
+            # BASELINE MODE
+            with col1:
+                st.markdown("### 📊 BASELINE MODE")
+                with st.spinner("Processing baseline..."):
+                    try:
+                        answer_baseline, mode_baseline, chunk_ids_baseline = answer_question(
+                            question, mode='baseline', top_k=top_k
+                        )
 
-                    # Determine collection name based on mode
-                    collection_name = "nvidia_improved" if used_mode == "improved" else "nvidia_report"
+                        # Display answer
+                        st.markdown("#### ✅ Answer")
+                        st.success(answer_baseline)
 
-                    # Get full chunk texts
-                    chunk_texts = get_chunk_texts(chunk_ids, collection_name=collection_name)
+                        # Estimate tokens
+                        chunks_baseline = get_chunk_data(chunk_ids_baseline, collection_name="nvidia_report")
+                        total_context = question + " " + " ".join([c['text'] for c in chunks_baseline])
+                        estimated_tokens = estimate_tokens(total_context)
 
-                    # Display each chunk in an expander
-                    for i, (chunk_id, chunk_text) in enumerate(zip(chunk_ids, chunk_texts)):
-                        with st.expander(f"📄 Source {i+1}: {chunk_id}"):
-                            st.text_area(
-                                "Chunk Text",
-                                value=chunk_text,
-                                height=200,
-                                key=f"chunk_{i}",
-                                disabled=True
-                            )
+                        st.markdown(f"**Estimated prompt tokens:** ~{estimated_tokens:,}")
+                        st.markdown(f"**Chunks used:** {len(chunk_ids_baseline)}")
 
-                except Exception as e:
-                    st.error(f"❌ Error: {str(e)}")
-                    st.info(
-                        "Make sure you have:\n"
-                        "1. Run `python rag/index_baseline.py` to create the index\n"
-                        "2. Set `COHERE_API_KEY` in your `.env` file"
-                    )
+                        # Display chunks
+                        st.markdown("#### 📚 Supporting Chunks")
+                        for i, chunk in enumerate(chunks_baseline):
+                            section_title = chunk['metadata'].get('section_title', 'N/A')
+                            with st.expander(f"Chunk {i+1}: {chunk['id']}", expanded=False):
+                                st.markdown(f"**Section:** {section_title}")
+                                st.text_area(
+                                    "Text",
+                                    value=chunk['text'][:500] + "..." if len(chunk['text']) > 500 else chunk['text'],
+                                    height=150,
+                                    key=f"baseline_chunk_{i}",
+                                    disabled=True
+                                )
+
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}")
+
+            # IMPROVED MODE
+            with col2:
+                st.markdown("### 🚀 IMPROVED MODE")
+                with st.spinner("Processing improved..."):
+                    try:
+                        answer_improved, mode_improved, chunk_ids_improved = answer_question(
+                            question, mode='improved', top_k=top_k
+                        )
+
+                        # Display answer
+                        st.markdown("#### ✅ Answer")
+                        st.success(answer_improved)
+
+                        # Estimate tokens
+                        chunks_improved = get_chunk_data(chunk_ids_improved, collection_name="nvidia_improved")
+                        total_context = question + " " + " ".join([c['text'] for c in chunks_improved])
+                        estimated_tokens = estimate_tokens(total_context)
+
+                        st.markdown(f"**Estimated prompt tokens:** ~{estimated_tokens:,}")
+                        st.markdown(f"**Chunks used:** {len(chunk_ids_improved)}")
+
+                        # Display chunks
+                        st.markdown("#### 📚 Supporting Chunks")
+                        for i, chunk in enumerate(chunks_improved):
+                            section_title = chunk['metadata'].get('section_title', 'N/A')
+                            with st.expander(f"Chunk {i+1}: {chunk['id']}", expanded=False):
+                                st.markdown(f"**Section:** {section_title}")
+                                st.markdown(f"**Quality Score:** {chunk['metadata'].get('quality_score', 'N/A'):.3f}")
+                                st.text_area(
+                                    "Text",
+                                    value=chunk['text'][:500] + "..." if len(chunk['text']) > 500 else chunk['text'],
+                                    height=150,
+                                    key=f"improved_chunk_{i}",
+                                    disabled=True
+                                )
+
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}")
+
         else:
             st.warning("⚠️ Please enter a question.")
 
@@ -166,7 +215,7 @@ def main():
     st.markdown("---")
     st.markdown(
         "<div style='text-align: center; color: gray;'>"
-        "Built with Streamlit, Cohere, and ChromaDB"
+        "Built with Streamlit, Cohere, and ChromaDB | Compare Baseline vs Improved RAG"
         "</div>",
         unsafe_allow_html=True
     )
