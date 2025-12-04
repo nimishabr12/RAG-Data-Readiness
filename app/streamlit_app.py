@@ -10,7 +10,7 @@ import streamlit as st
 import chromadb
 from dotenv import load_dotenv
 
-from rag.query import answer_question_baseline
+from rag.query import answer_question
 
 load_dotenv()
 
@@ -46,14 +46,37 @@ def main():
 
     # Sidebar configuration
     st.sidebar.header("⚙️ Configuration")
-    top_k = st.sidebar.slider("Number of chunks to retrieve", min_value=1, max_value=10, value=5)
+
+    # Mode selection
+    mode = st.sidebar.radio(
+        "Retrieval Mode",
+        options=["baseline", "improved"],
+        format_func=lambda x: {
+            "baseline": "Baseline (Simple Vector Retrieval)",
+            "improved": "Improved (Smart Chunks + Reranking)"
+        }[x],
+        index=0
+    )
+
+    top_k = st.sidebar.slider("Number of chunks for answer", min_value=1, max_value=10, value=5)
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("### About")
-    st.sidebar.info(
-        "This tool uses Retrieval-Augmented Generation (RAG) to answer questions "
-        "about the NVIDIA report using Cohere's embed-4 and command-r models."
-    )
+    if mode == "baseline":
+        st.sidebar.info(
+            "**Baseline Mode:**\n"
+            "- Simple word-based chunking\n"
+            "- Direct vector similarity retrieval\n"
+            "- Uses nvidia_report collection"
+        )
+    else:
+        st.sidebar.info(
+            "**Improved Mode:**\n"
+            "- Smart section-aware chunking\n"
+            "- Quality filtering\n"
+            "- Cohere Rerank for better relevance\n"
+            "- Uses nvidia_improved collection"
+        )
 
     # Check if database exists
     if not os.path.exists("./chroma_db"):
@@ -100,20 +123,23 @@ def main():
         if question:
             with st.spinner("🔄 Processing your question..."):
                 try:
-                    # Call RAG system
-                    answer, chunk_ids = answer_question_baseline(question, top_k=top_k)
+                    # Call RAG system with selected mode
+                    answer, used_mode, chunk_ids = answer_question(question, mode=mode, top_k=top_k)
 
                     # Display answer
                     st.markdown("---")
-                    st.markdown("### ✅ Answer")
+                    st.markdown(f"### ✅ Answer (Mode: {used_mode.upper()})")
                     st.success(answer)
 
                     # Display retrieved chunks
                     st.markdown("---")
                     st.markdown(f"### 📚 Retrieved Chunks ({len(chunk_ids)} sources)")
 
+                    # Determine collection name based on mode
+                    collection_name = "nvidia_improved" if used_mode == "improved" else "nvidia_report"
+
                     # Get full chunk texts
-                    chunk_texts = get_chunk_texts(chunk_ids)
+                    chunk_texts = get_chunk_texts(chunk_ids, collection_name=collection_name)
 
                     # Display each chunk in an expander
                     for i, (chunk_id, chunk_text) in enumerate(zip(chunk_ids, chunk_texts)):
