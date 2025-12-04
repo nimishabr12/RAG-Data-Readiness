@@ -1,0 +1,10 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Sample question about the document?",
+      "expected_answer": "",
+      "category": ""
+    }
+  ]
+}

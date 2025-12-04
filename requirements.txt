@@ -1,0 +1,7 @@
+cohere
+pypdf
+pdfplumber
+chromadb
+streamlit
+pandas
+python-dotenv
