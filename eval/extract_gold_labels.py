@@ -63,7 +63,7 @@ def extract_gold_labels(results_file: str = "eval/results.csv",
         writer.writeheader()
         writer.writerows(gold_labels)
 
-    print(f"✓ Gold labels extracted to: {output_file}")
+    print(f"* Gold labels extracted to: {output_file}")
     print(f"Total entries: {len(gold_labels)}")
 
     # Print summary

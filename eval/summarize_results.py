@@ -85,7 +85,7 @@ def compute_accuracy_metrics(merged_df: pd.DataFrame) -> Dict:
         Dictionary of metrics
     """
     # Filter to only rows with gold labels
-    labeled_df = merged_df[merged_df['correct_gold'].notna()].copy()
+    labeled_df = merged_df[merged_df['correct'].notna()].copy()
 
     if len(labeled_df) == 0:
         return {
@@ -106,13 +106,13 @@ def compute_accuracy_metrics(merged_df: pd.DataFrame) -> Dict:
             continue
 
         # Correctness metrics
-        correct_scores = mode_df['correct_gold'].dropna()
+        correct_scores = mode_df['correct'].dropna()
         fully_correct = (correct_scores == 1.0).sum()
         partially_correct = (correct_scores == 0.5).sum()
         incorrect = (correct_scores == 0.0).sum()
 
         # Faithfulness metrics
-        faithful_scores = mode_df['faithful_gold'].dropna()
+        faithful_scores = mode_df['faithful'].dropna()
         faithful = (faithful_scores == 1.0).sum()
         unfaithful = (faithful_scores == 0.0).sum()
 
@@ -121,8 +121,8 @@ def compute_accuracy_metrics(merged_df: pd.DataFrame) -> Dict:
         avg_faithful = faithful_scores.mean() if len(faithful_scores) > 0 else 0
 
         # LLM-as-judge metrics (if available)
-        llm_correct = mode_df['correctness_llm'].dropna()
-        llm_faithful = mode_df['faithfulness_llm'].dropna()
+        llm_correct = mode_df['correctness'].dropna()
+        llm_faithful = mode_df['faithfulness'].dropna()
 
         avg_llm_correct = llm_correct.mean() if len(llm_correct) > 0 else None
         avg_llm_faithful = llm_faithful.mean() if len(llm_faithful) > 0 else None
@@ -157,16 +157,16 @@ def compute_accuracy_metrics(merged_df: pd.DataFrame) -> Dict:
         }
 
     # Compute agreement between LLM-as-judge and gold labels (if both available)
-    if 'correctness_llm' in merged_df.columns:
+    if 'correctness' in merged_df.columns:
         agreement_df = labeled_df[
-            labeled_df['correctness_llm'].notna() &
-            labeled_df['correct_gold'].notna()
+            labeled_df['correctness'].notna() &
+            labeled_df['correct'].notna()
         ]
 
         if len(agreement_df) > 0:
             # Calculate correlation
-            corr_correct = agreement_df['correctness_llm'].corr(agreement_df['correct_gold'])
-            corr_faithful = agreement_df['faithfulness_llm'].corr(agreement_df['faithful_gold'])
+            corr_correct = agreement_df['correctness'].corr(agreement_df['correct'])
+            corr_faithful = agreement_df['faithfulness'].corr(agreement_df['faithful'])
 
             metrics['llm_judge_agreement'] = {
                 'correctness_correlation': corr_correct,
@@ -268,7 +268,7 @@ def create_comparison_table(merged_df: pd.DataFrame) -> pd.DataFrame:
         Comparison DataFrame
     """
     # Filter to labeled data
-    labeled = merged_df[merged_df['correct_gold'].notna()].copy()
+    labeled = merged_df[merged_df['correct'].notna()].copy()
 
     if len(labeled) == 0:
         return pd.DataFrame()
@@ -291,11 +291,11 @@ def create_comparison_table(merged_df: pd.DataFrame) -> pd.DataFrame:
         comparison_rows.append({
             'question_id': qid,
             'question': baseline_row['question'][:60] + '...' if len(baseline_row['question']) > 60 else baseline_row['question'],
-            'baseline_correct': baseline_row['correct_gold'],
-            'improved_correct': improved_row['correct_gold'],
-            'baseline_faithful': baseline_row['faithful_gold'],
-            'improved_faithful': improved_row['faithful_gold'],
-            'improvement': 'Yes' if improved_row['correct_gold'] > baseline_row['correct_gold'] else 'No'
+            'baseline_correct': baseline_row['correct'],
+            'improved_correct': improved_row['correct'],
+            'baseline_faithful': baseline_row['faithful'],
+            'improved_faithful': improved_row['faithful'],
+            'improvement': 'Yes' if improved_row['correct'] > baseline_row['correct'] else 'No'
         })
 
     return pd.DataFrame(comparison_rows)

@@ -204,9 +204,9 @@ def run_evaluation_query(question_id: int, question: str, mode: str, top_k: int 
             result['correctness'] = correctness if correctness >= 0 else None
             result['faithfulness'] = faithfulness if faithfulness >= 0 else None
 
-            print(f"    ✓ Completed in {elapsed_time:.2f}s | Context: {total_context_chars:,} chars | Correctness: {correctness} | Faithfulness: {faithfulness}")
+            print(f"    * Completed in {elapsed_time:.2f}s | Context: {total_context_chars:,} chars | Correctness: {correctness} | Faithfulness: {faithfulness}")
         else:
-            print(f"    ✓ Completed in {elapsed_time:.2f}s, {total_context_chars:,} chars context")
+            print(f"    * Completed in {elapsed_time:.2f}s, {total_context_chars:,} chars context")
 
         return result
 
@@ -226,7 +226,7 @@ def run_evaluation_query(question_id: int, question: str, mode: str, top_k: int 
             'status': 'error'
         }
 
-        print(f"    ✗ Error: {str(e)}")
+        print(f"    X Error: {str(e)}")
 
         return result
 
