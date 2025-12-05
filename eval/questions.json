@@ -2,9 +2,123 @@
   "questions": [
     {
       "id": 1,
-      "question": "Sample question about the document?",
-      "expected_answer": "",
-      "category": ""
-    }
+      "question": "What was NVIDIA's total revenue for the year ended January 26, 2025?",
+      "answer_hint": "Use the consolidated statement of income for the most recent year.",
+      "page_hint": 52
+    },
+  {
+    "id": 2,
+    "question": "How many business segments does NVIDIA report, and what are their names?",
+    "answer_hint": "Look for the description of reportable segments in the business overview.",
+    "page_hint": 1
+  },
+  {
+    "id": 3,
+    "question": "What was NVIDIA's net income for the year ended January 26, 2025?",
+    "answer_hint": "Refer to the consolidated statement of income for net income.",
+    "page_hint": 52
+  },
+  {
+    "id": 4,
+    "question": "What were NVIDIA's research and development expenses for the year ended January 26, 2025?",
+    "answer_hint": "Check the operating expenses section in the income statement.",
+    "page_hint": 52
+  },
+  {
+    "id": 5,
+    "question": "What are some of the primary products or platforms included in the Compute & Networking segment?",
+    "answer_hint": "Look for the narrative description of the Compute & Networking segment.",
+    "page_hint": 1
+  },
+  {
+    "id": 6,
+    "question": "What are some of the main products or offerings included in the Graphics segment?",
+    "answer_hint": "Check the description of the Graphics segment in the business section.",
+    "page_hint": 1
+  },
+  {
+    "id": 7,
+    "question": "What were NVIDIA's total operating expenses for the year ended January 26, 2025?",
+    "answer_hint": "Use the total operating expenses line in the income statement.",
+    "page_hint": 52
+  },
+  {
+    "id": 8,
+    "question": "What was NVIDIA's basic net income per share for the year ended January 26, 2025?",
+    "answer_hint": "See the net income per share data in the income statement.",
+    "page_hint": 52
+  },
+  {
+    "id": 9,
+    "question": "What was NVIDIA's diluted net income per share for the year ended January 26, 2025?",
+    "answer_hint": "Look directly below the basic earnings per share line.",
+    "page_hint": 52
+  },
+  {
+    "id": 10,
+    "question": "How did NVIDIA's revenue in the year ended January 26, 2025 compare to the prior year?",
+    "answer_hint": "Compare the revenue line across the last two fiscal years.",
+    "page_hint": 52
+  },
+  {
+    "id": 11,
+    "question": "What were NVIDIA's cost of revenue for the year ended January 26, 2025?",
+    "answer_hint": "Refer to the cost of revenue line in the income statement.",
+    "page_hint": 52
+  },
+  {
+    "id": 12,
+    "question": "What types of platforms or solutions does NVIDIA offer for data centers?",
+    "answer_hint": "Look for mentions of data center platforms and AI solutions in the segment descriptions.",
+    "page_hint": 1
+  },
+  {
+    "id": 13,
+    "question": "What types of products does NVIDIA provide for gaming?",
+    "answer_hint": "Check the Graphics segment description for gaming-related products.",
+    "page_hint": 1
+  },
+  {
+    "id": 14,
+    "question": "What were NVIDIA's sales, general and administrative expenses for the year ended January 26, 2025?",
+    "answer_hint": "Find the SG&A line under operating expenses.",
+    "page_hint": 52
+  },
+  {
+    "id": 15,
+    "question": "What were NVIDIA's interest income and interest expense for the year ended January 26, 2025?",
+    "answer_hint": "Look for the interest income and interest expense lines below operating income.",
+    "page_hint": 52
+  },
+  {
+    "id": 16,
+    "question": "What was NVIDIA's income tax expense for the year ended January 26, 2025?",
+    "answer_hint": "Check the income tax expense line near the bottom of the income statement.",
+    "page_hint": 52
+  },
+  {
+    "id": 17,
+    "question": "What is NVIDIA's Omniverse Enterprise software used for?",
+    "answer_hint": "Look in the description of platforms offered for industrial and digital twin applications.",
+    "page_hint": 1
+  },
+  {
+    "id": 18,
+    "question": "What types of automotive platforms does NVIDIA provide?",
+    "answer_hint": "Check the Compute & Networking segment description for automotive offerings.",
+    "page_hint": 1
+  },
+  {
+    "id": 19,
+    "question": "What types of GPUs does NVIDIA offer for enterprise workstation graphics?",
+    "answer_hint": "Look for mentions of RTX or similar GPUs in the Graphics segment discussion.",
+    "page_hint": 1
+  },
+  {
+    "id": 20,
+    "question": "What were the weighted average basic and diluted shares used in NVIDIA's per-share computation for the year ended January 26, 2025?",
+    "answer_hint": "Use the weighted average shares data in the income statement.",
+    "page_hint": 52
+  }
   ]
 }
