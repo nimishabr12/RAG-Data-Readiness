@@ -86,12 +86,15 @@ def answer_question(
     if mode == 'improved':
         print(f"\nStep 3: Reranking with Cohere Rerank...")
 
+        # Cost-cutting: Use only top 3 chunks for improved mode
+        max_final_chunks = 3
+
         # Call Cohere Rerank
         rerank_response = co.rerank(
             model="rerank-english-v3.0",
             query=question,
             documents=candidate_docs,
-            top_n=top_k
+            top_n=max_final_chunks
         )
 
         # Extract reranked results
@@ -99,7 +102,7 @@ def answer_question(
         final_ids = [candidate_ids[i] for i in reranked_indices]
         final_docs = [candidate_docs[i] for i in reranked_indices]
 
-        print(f"Reranked to top-{top_k} chunks:")
+        print(f"Reranked to top-{max_final_chunks} chunks:")
         for i, (result, chunk_id) in enumerate(zip(rerank_response.results, final_ids)):
             print(f"  {i+1}. {chunk_id} (relevance score: {result.relevance_score:.4f})")
 
