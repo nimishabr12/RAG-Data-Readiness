@@ -344,6 +344,35 @@ def create_comparison_table(merged_df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(comparison_rows)
 
 
+def get_summary(results_file: str = "eval/results.csv",
+                gold_labels_file: str = "eval/gold_labels.csv") -> Dict:
+    """
+    Get evaluation summary metrics programmatically.
+
+    Args:
+        results_file: Path to results CSV file
+        gold_labels_file: Path to gold labels CSV file
+
+    Returns:
+        Dictionary containing metrics and comparison data
+    """
+    # Load data
+    results_df = load_results(results_file)
+    labels_df = load_gold_labels(gold_labels_file)
+
+    # Join
+    merged_df = join_results_with_labels(results_df, labels_df)
+
+    # Compute metrics
+    metrics = compute_accuracy_metrics(merged_df)
+
+    # Add comparison table
+    comparison_df = create_comparison_table(merged_df)
+    metrics['comparison_table'] = comparison_df
+
+    return metrics
+
+
 def main():
     """Main analysis workflow."""
     import argparse
@@ -356,28 +385,17 @@ def main():
     args = parser.parse_args()
 
     try:
-        # Load data
-        print("Loading data...")
-        results_df = load_results(args.results)
-        labels_df = load_gold_labels(args.gold_labels)
-
-        print(f"Loaded {len(results_df)} results")
-        print(f"Loaded {len(labels_df)} gold labels")
-
-        # Join
-        merged_df = join_results_with_labels(results_df, labels_df)
-
-        # Compute metrics
-        metrics = compute_accuracy_metrics(merged_df)
+        # Get summary
+        metrics = get_summary(args.results, args.gold_labels)
 
         # Print summary
         print_summary(metrics)
 
         # Show comparison table if requested
         if args.comparison:
-            comparison_df = create_comparison_table(merged_df)
+            comparison_df = metrics.get('comparison_table')
 
-            if len(comparison_df) > 0:
+            if comparison_df is not None and len(comparison_df) > 0:
                 print()
                 print("=" * 80)
                 print("BASELINE vs IMPROVED COMPARISON")
