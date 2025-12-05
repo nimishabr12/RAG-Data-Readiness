@@ -256,6 +256,49 @@ def print_summary(metrics: Dict) -> None:
 
     print("=" * 80)
 
+    # Add side-by-side comparison table
+    if 'baseline' in metrics['by_mode'] and 'improved' in metrics['by_mode']:
+        print()
+        print("=" * 80)
+        print("SIDE-BY-SIDE COMPARISON")
+        print("=" * 80)
+        print()
+
+        baseline = metrics['by_mode']['baseline']
+        improved = metrics['by_mode']['improved']
+
+        print(f"{'Metric':<30} {'Baseline':<20} {'Improved':<20} {'Delta':<15}")
+        print("-" * 80)
+
+        # Accuracy
+        b_acc = baseline['correctness']['avg_score']
+        i_acc = improved['correctness']['avg_score']
+        delta_acc = i_acc - b_acc
+        print(f"{'Accuracy (mean correct)':<30} {b_acc:<20.3f} {i_acc:<20.3f} {delta_acc:+.3f}")
+
+        # Context size
+        b_ctx = baseline['efficiency']['avg_context_chars']
+        i_ctx = improved['efficiency']['avg_context_chars']
+        delta_ctx = i_ctx - b_ctx
+        delta_pct = (delta_ctx / b_ctx * 100) if b_ctx > 0 else 0
+        print(f"{'Avg context (chars)':<30} {b_ctx:<20,.0f} {i_ctx:<20,.0f} {delta_pct:+.1f}%")
+
+        # Elapsed time
+        b_time = baseline['efficiency']['avg_elapsed_time']
+        i_time = improved['efficiency']['avg_elapsed_time']
+        delta_time = i_time - b_time
+        delta_time_pct = (delta_time / b_time * 100) if b_time > 0 else 0
+        print(f"{'Avg elapsed time (sec)':<30} {b_time:<20.2f} {i_time:<20.2f} {delta_time_pct:+.1f}%")
+
+        # Faithfulness
+        b_faith = baseline['faithfulness']['avg_score']
+        i_faith = improved['faithfulness']['avg_score']
+        delta_faith = i_faith - b_faith
+        print(f"{'Faithfulness (mean score)':<30} {b_faith:<20.3f} {i_faith:<20.3f} {delta_faith:+.3f}")
+
+        print()
+        print("=" * 80)
+
 
 def create_comparison_table(merged_df: pd.DataFrame) -> pd.DataFrame:
     """
