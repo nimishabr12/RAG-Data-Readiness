@@ -378,7 +378,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description='Summarize RAG evaluation results with gold labels')
-    parser.add_argument('--results', default='eval/results.csv', help='Path to results CSV file')
+    parser.add_argument('--results', '--input', default='eval/results.csv', help='Path to results CSV file')
     parser.add_argument('--gold-labels', default='eval/gold_labels.csv', help='Path to gold labels CSV file')
     parser.add_argument('--comparison', action='store_true', help='Show baseline vs improved comparison table')
 
