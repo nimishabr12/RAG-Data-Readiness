@@ -77,6 +77,43 @@ python rag/index_baseline.py
 python rag/query.py
 ```
 
+## NVIDIA 10-K Case Study
+
+### Document
+This implementation uses NVIDIA's 10-K annual report (130 pages, ~500K characters) as a real-world corpus for evaluating RAG data-readiness strategies.
+
+### Experiment Setup
+We compared two RAG approaches over the same NVIDIA 10-K corpus using Cohere's API suite:
+
+**Baseline:**
+- Simple word-based chunking (500 tokens, 10% overlap)
+- Direct vector retrieval (top-5)
+- Cohere `embed-english-v3.0` + `command-r-plus-08-2024`
+
+**Improved:**
+- Section-aware chunking with quality filtering
+- Two-stage retrieval: retrieve 20 candidates, rerank to top-3
+- Cohere `embed-english-v3.0` + `rerank-english-v3.0` + `command-r-plus-08-2024`
+
+### Results (10 Questions, LLM-as-a-Judge)
+
+| Metric | Baseline | Improved | Delta |
+|--------|----------|----------|-------|
+| **Accuracy** | 70% | 70% | 0% |
+| **Faithfulness** | 90% | 70% | -20% |
+| **Avg Context** | 21,753 chars | 14,806 chars | **-32%** ✓ |
+| **Avg Latency** | 9.24s | 7.76s | **-16%** ✓ |
+
+**Key Findings:**
+- **Cost-Performance Tradeoff**: Improved mode maintains identical accuracy while reducing context size by 32% and latency by 16%
+- **Faithfulness Impact**: 20% reduction in faithfulness suggests the model occasionally makes inferences beyond retrieved context
+- **Production Recommendation**: Improved mode is suitable for cost-sensitive deployments where minor faithfulness degradation is acceptable
+
+**Evaluation Framework:**
+- 10 factual questions about NVIDIA financials and business segments
+- LLM-as-a-judge scoring (correctness: 1.0/0.5/0.0, faithfulness: 1.0/0.0)
+- Side-by-side comparison via Streamlit dashboard (`streamlit run app/streamlit_app.py`)
+
 ## Technologies
 
 - **Cohere**: LLM and embedding generation
