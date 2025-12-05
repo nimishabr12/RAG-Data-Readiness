@@ -1,0 +1,97 @@
+question_id,mode,question,answer_text,chunk_ids,num_chunks,total_context_chars,elapsed_time_sec,correctness,faithfulness,timestamp,status
+1,baseline,"What was NVIDIA's total revenue for the year ended January 26, 2025?","NVIDIA's total revenue for the year ended January 26, 2025, was $130,497 million.","chunk_84,chunk_76,chunk_62,chunk_53,chunk_52",5,21369,5.25,,,2025-12-04T22:12:25.386166,success
+1,improved,"What was NVIDIA's total revenue for the year ended January 26, 2025?","NVIDIA's total revenue for the year ended January 26, 2025, was $130,497 million.","chunk_132,chunk_131,chunk_91,chunk_126,chunk_121",5,23899,5.24,,,2025-12-04T22:12:30.656634,success
+2,baseline,"How many business segments does NVIDIA report, and what are their names?",NVIDIA reports two business segments: Compute & Networking and Graphics.,"chunk_4,chunk_52,chunk_53,chunk_7,chunk_83",5,22527,6.26,,,2025-12-04T22:12:36.934667,success
+2,improved,"How many business segments does NVIDIA report, and what are their names?","NVIDIA reports two business segments:
+1. Compute & Networking
+2. Graphics","chunk_25,chunk_85,chunk_131,chunk_91,chunk_112",5,24250,7.2,,,2025-12-04T22:12:44.158706,success
+3,baseline,"What was NVIDIA's net income for the year ended January 26, 2025?","NVIDIA's net income for the year ended January 26, 2025, was $72,880 million.","chunk_62,chunk_76,chunk_52,chunk_84,chunk_80",5,21135,8.25,,,2025-12-04T22:12:52.422340,success
+3,improved,"What was NVIDIA's net income for the year ended January 26, 2025?","NVIDIA's net income for the year ended January 26, 2025 was 55.8%","chunk_91,chunk_131,chunk_129,chunk_121,chunk_123",5,24224,6.98,,,2025-12-04T22:12:59.420386,success
+4,baseline,"What were NVIDIA's research and development expenses for the year ended January 26, 2025?","NVIDIA's research and development expenses for the year ended January 26, 2025, were $12,914 million.","chunk_76,chunk_84,chunk_62,chunk_83,chunk_64",5,21805,7.17,,,2025-12-04T22:13:06.609982,success
+4,improved,"What were NVIDIA's research and development expenses for the year ended January 26, 2025?","NVIDIA's research and development expenses for the year ended January 26, 2025, were $3,423 million.","chunk_121,chunk_129,chunk_91,chunk_127,chunk_131",5,22816,7.26,,,2025-12-04T22:13:13.887566,success
+5,baseline,What are some of the primary products or platforms included in the Compute & Networking segment?,"The Compute & Networking segment includes:
+- Data Center accelerated computing platforms and AI solutions and software
+- Networking
+- Automotive platforms and autonomous and electric vehicle solutions
+- Jetson for robotics and other embedded platforms
+- DGX Cloud computing services","chunk_10,chunk_5,chunk_47,chunk_83,chunk_4",5,22439,17.64,,,2025-12-04T22:13:31.539737,success
+5,improved,What are some of the primary products or platforms included in the Compute & Networking segment?,"The Compute & Networking segment includes:
+- Data Center accelerated computing platforms and AI solutions and software
+- Networking
+- Automotive platforms and autonomous and electric vehicle solutions
+- Jetson for robotics and other embedded platforms
+- DGX Cloud computing services","chunk_131,chunk_25,chunk_85,chunk_132,chunk_54",5,21322,13.79,,,2025-12-04T22:13:45.341614,success
+6,baseline,What are some of the main products or offerings included in the Graphics segment?,"The Graphics segment includes:
+- GeForce GPUs for gaming and PCs
+- The GeForce NOW game streaming service and related infrastructure
+- Solutions for gaming platforms
+- Quadro/NVIDIA RTX GPUs for enterprise workstation graphics
+- vGPU software for cloud-based visual and virtual computing
+- Automotive platforms for infotainment systems
+- Omniverse Enterprise software for building and operating industrial AI and digital twin applications","chunk_83,chunk_6,chunk_9,chunk_10,chunk_5",5,22779,37.04,,,2025-12-04T22:14:22.401517,success
+6,improved,What are some of the main products or offerings included in the Graphics segment?,"The Graphics segment includes:
+- GeForce GPUs for gaming and PCs
+- The GeForce NOW game streaming service and related infrastructure
+- Solutions for gaming platforms
+- Quadro/NVIDIA RTX GPUs for enterprise workstation graphics
+- vGPU software for cloud-based visual and virtual computing
+- Automotive platforms for infotainment systems
+- Omniverse Enterprise software for building and operating industrial AI and digital twin applications","chunk_25,chunk_131,chunk_85,chunk_26,chunk_91",5,25770,19.19,,,2025-12-04T22:14:41.610685,success
+7,baseline,"What were NVIDIA's total operating expenses for the year ended January 26, 2025?","NVIDIA's total operating expenses for the year ended January 26, 2025, were $16,405 million.","chunk_76,chunk_62,chunk_84,chunk_85,chunk_83",5,21283,7.86,,,2025-12-04T22:14:49.502454,success
+7,improved,"What were NVIDIA's total operating expenses for the year ended January 26, 2025?","NVIDIA's total operating expenses for the year ended January 26, 2025, were $12.6 million.","chunk_131,chunk_132,chunk_91,chunk_121,chunk_127",5,22584,6.75,,,2025-12-04T22:14:56.261695,success
+8,baseline,"What was NVIDIA's basic net income per share for the year ended January 26, 2025?","NVIDIA's basic net income per share for the year ended January 26, 2025, was $2.97.","chunk_62,chunk_46,chunk_52,chunk_64,chunk_80",5,21345,6.02,,,2025-12-04T22:15:02.330772,success
+8,improved,"What was NVIDIA's basic net income per share for the year ended January 26, 2025?","NVIDIA's basic net income per share for the year ended January 26, 2025 was $2.97.","chunk_123,chunk_121,chunk_91,chunk_131,chunk_108",5,25041,6.87,,,2025-12-04T22:15:09.218346,success
+9,baseline,"What was NVIDIA's diluted net income per share for the year ended January 26, 2025?","NVIDIA's diluted net income per share for the year ended January 26, 2025, was $2.94.","chunk_62,chunk_46,chunk_52,chunk_76,chunk_64",5,21479,8.01,,,2025-12-04T22:15:17.244554,success
+9,improved,"What was NVIDIA's diluted net income per share for the year ended January 26, 2025?","NVIDIA's diluted net income per share for the year ended January 26, 2025 was $2.94.","chunk_123,chunk_121,chunk_91,chunk_131,chunk_108",5,25041,7.88,,,2025-12-04T22:15:25.141623,success
+10,baseline,"How did NVIDIA's revenue in the year ended January 26, 2025 compare to the prior year?","NVIDIA's revenue for the year ended January 26, 2025 was $130,497 million, compared to $60,922 million for the prior year. This represents a 114% increase in revenue.","chunk_84,chunk_62,chunk_76,chunk_53,chunk_52",5,21369,10.51,,,2025-12-04T22:15:35.664146,success
+10,improved,"How did NVIDIA's revenue in the year ended January 26, 2025 compare to the prior year?","NVIDIA's revenue for the year ended January 26, 2025 was $130,497 million, compared to $60,922 million in the prior year. This represents a 114% increase in revenue.
+
+The company's revenue from Compute & Networking increased by 145% to $116,193 million, while revenue from Graphics increased by 6% to $14,304 million.
+
+The company's operating income also increased by 147% to $81,453 million.","chunk_91,chunk_126,chunk_132,chunk_131,chunk_121",5,23899,23.1,,,2025-12-04T22:15:58.776677,success
+1,baseline,"What was NVIDIA's total revenue for the year ended January 26, 2025?","NVIDIA's total revenue for the year ended January 26, 2025, was $130,497 million.","chunk_84,chunk_76,chunk_62,chunk_53,chunk_52",5,21369,7.95,1.0,1.0,2025-12-04T22:19:01.718758,success
+1,improved,"What was NVIDIA's total revenue for the year ended January 26, 2025?","NVIDIA's total revenue for the year ended January 26, 2025, was $130,497 million.","chunk_132,chunk_131,chunk_91,chunk_126,chunk_121",5,23899,7.51,1.0,1.0,2025-12-04T22:19:10.604736,success
+2,baseline,"How many business segments does NVIDIA report, and what are their names?",NVIDIA reports two business segments: Compute & Networking and Graphics.,"chunk_4,chunk_52,chunk_53,chunk_7,chunk_83",5,22527,7.23,0.0,1.0,2025-12-04T22:19:19.231389,success
+2,improved,"How many business segments does NVIDIA report, and what are their names?","NVIDIA reports two business segments:
+1. Compute & Networking
+2. Graphics","chunk_25,chunk_85,chunk_131,chunk_91,chunk_112",5,24250,38.35,1.0,1.0,2025-12-04T22:19:58.620319,success
+3,baseline,"What was NVIDIA's net income for the year ended January 26, 2025?","NVIDIA's net income for the year ended January 26, 2025 was $72,880 million.","chunk_62,chunk_76,chunk_52,chunk_84,chunk_80",5,21135,6.89,0.0,1.0,2025-12-04T22:20:06.783562,success
+3,improved,"What was NVIDIA's net income for the year ended January 26, 2025?","NVIDIA's net income for the year ended January 26, 2025 was 55.8%.","chunk_91,chunk_131,chunk_129,chunk_121,chunk_123",5,24224,7.99,0.0,0.0,2025-12-04T22:20:16.321129,success
+4,baseline,"What were NVIDIA's research and development expenses for the year ended January 26, 2025?","NVIDIA's research and development expenses for the year ended January 26, 2025, were $12,914 million.","chunk_76,chunk_84,chunk_62,chunk_83,chunk_64",5,21805,6.47,1.0,1.0,2025-12-04T22:20:24.306490,success
+4,improved,"What were NVIDIA's research and development expenses for the year ended January 26, 2025?","NVIDIA's research and development expenses for the year ended January 26, 2025 were $3,423 million.","chunk_121,chunk_129,chunk_91,chunk_127,chunk_131",5,22816,6.54,1.0,1.0,2025-12-04T22:20:32.398049,success
+5,baseline,What are some of the primary products or platforms included in the Compute & Networking segment?,"The Compute & Networking segment includes the following products and platforms:
+- Data Center accelerated computing platforms and AI solutions and software
+- Networking
+- Automotive platforms and autonomous and electric vehicle solutions
+- Jetson for robotics and other embedded platforms
+- DGX Cloud computing services","chunk_10,chunk_5,chunk_47,chunk_83,chunk_4",5,22439,17.71,1.0,1.0,2025-12-04T22:20:51.462648,success
+5,improved,What are some of the primary products or platforms included in the Compute & Networking segment?,"The Compute & Networking segment includes:
+- Data Center accelerated computing platforms and AI solutions and software
+- Networking
+- Automotive platforms and autonomous and electric vehicle solutions
+- Jetson for robotics and other embedded platforms
+- DGX Cloud computing services","chunk_131,chunk_25,chunk_85,chunk_132,chunk_54",5,21322,11.04,1.0,1.0,2025-12-04T22:21:03.712872,success
+6,baseline,What are some of the main products or offerings included in the Graphics segment?,"The Graphics segment includes:
+- GeForce GPUs for gaming and PCs
+- The GeForce NOW game streaming service and related infrastructure
+- Solutions for gaming platforms
+- Quadro/NVIDIA RTX GPUs for enterprise workstation graphics
+- vGPU software for cloud-based visual and virtual computing
+- Automotive platforms for infotainment systems
+- Omniverse Enterprise software for building and operating industrial AI and digital twin applications","chunk_83,chunk_6,chunk_9,chunk_10,chunk_5",5,22779,15.07,1.0,0.0,2025-12-04T22:21:19.904606,success
+6,improved,What are some of the main products or offerings included in the Graphics segment?,"The Graphics segment includes:
+- GeForce GPUs for gaming and PCs
+- The GeForce NOW game streaming service and related infrastructure
+- Solutions for gaming platforms
+- Quadro/NVIDIA RTX GPUs for enterprise workstation graphics
+- vGPU software for cloud-based visual and virtual computing
+- Automotive platforms for infotainment systems
+- Omniverse Enterprise software for building and operating industrial AI and digital twin applications","chunk_25,chunk_131,chunk_85,chunk_26,chunk_91",5,25770,16.85,1.0,1.0,2025-12-04T22:21:39.637512,success
+7,baseline,"What were NVIDIA's total operating expenses for the year ended January 26, 2025?","NVIDIA's total operating expenses for the year ended January 26, 2025, were 16,405 million.","chunk_76,chunk_62,chunk_84,chunk_85,chunk_83",5,21283,7.09,1.0,1.0,2025-12-04T22:21:48.510664,success
+7,improved,"What were NVIDIA's total operating expenses for the year ended January 26, 2025?","NVIDIA's total operating expenses for the year ended January 26, 2025, were $12.6 million.","chunk_131,chunk_132,chunk_91,chunk_121,chunk_127",5,22584,6.6,0.0,0.0,2025-12-04T22:21:56.616650,success
+8,baseline,"What was NVIDIA's basic net income per share for the year ended January 26, 2025?","NVIDIA's basic net income per share for the year ended January 26, 2025, was $2.97.","chunk_62,chunk_46,chunk_52,chunk_64,chunk_80",5,21345,6.82,1.0,1.0,2025-12-04T22:22:04.859033,success
+8,improved,"What was NVIDIA's basic net income per share for the year ended January 26, 2025?","NVIDIA's basic net income per share for the year ended January 26, 2025 was $2.97.","chunk_123,chunk_121,chunk_91,chunk_131,chunk_108",5,25041,4.37,1.0,0.0,2025-12-04T22:22:10.761584,success
+9,baseline,"What was NVIDIA's diluted net income per share for the year ended January 26, 2025?","NVIDIA's diluted net income per share for the year ended January 26, 2025, was $2.94.","chunk_62,chunk_46,chunk_52,chunk_76,chunk_64",5,21479,5.72,1.0,1.0,2025-12-04T22:22:17.709596,success
+9,improved,"What was NVIDIA's diluted net income per share for the year ended January 26, 2025?","NVIDIA's diluted net income per share for the year ended January 26, 2025, was $2.94.","chunk_123,chunk_121,chunk_91,chunk_131,chunk_108",5,25041,4.69,1.0,0.0,2025-12-04T22:22:24.219778,success
+10,baseline,"How did NVIDIA's revenue in the year ended January 26, 2025 compare to the prior year?","NVIDIA's revenue for the year ended January 26, 2025 was $130,497 million, compared to $60,922 million in the prior year. This represents an increase of 114% in revenue.","chunk_84,chunk_62,chunk_76,chunk_53,chunk_52",5,21369,10.63,1.0,1.0,2025-12-04T22:22:38.561953,success
+10,improved,"How did NVIDIA's revenue in the year ended January 26, 2025 compare to the prior year?","NVIDIA's revenue for the year ended January 26, 2025 was $130,497 million, compared to $60,922 million in the prior year. This represents a 114% increase.","chunk_91,chunk_126,chunk_132,chunk_131,chunk_121",5,23899,8.21,1.0,1.0,2025-12-04T22:22:48.134026,success
