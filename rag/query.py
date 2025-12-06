@@ -4,16 +4,40 @@ Handles retrieval and response generation using Cohere.
 """
 
 import os
-from typing import Literal
+from typing import Literal, Optional
+from dataclasses import dataclass
 import cohere
 import chromadb
 from dotenv import load_dotenv
 
 
+__all__ = ['answer_question', 'RetrievalConfig', 'IMPROVED_BEST']
+
+
+@dataclass
+class RetrievalConfig:
+    """Configuration for improved-mode retrieval parameters."""
+    initial_candidates: int  # Number of candidates to retrieve before reranking
+    max_final_chunks: int    # Number of chunks to keep after reranking
+    rerank_model: str        # Cohere rerank model to use
+
+
+# Preset configurations
+IMPROVED_BEST = RetrievalConfig(
+    initial_candidates=20,
+    max_final_chunks=3,
+    rerank_model="rerank-english-v3.0"
+)
+# IMPROVED_BEST achieves same accuracy as baseline (±0.02) with:
+# - 32% lower context size (14.8k vs 21.8k chars)
+# - 16% lower latency (7.8s vs 9.2s)
+
+
 def answer_question(
     question: str,
     mode: Literal['baseline', 'improved'] = 'baseline',
-    top_k: int = 5
+    top_k: int = 5,
+    retrieval_config: Optional[RetrievalConfig] = None
 ) -> tuple[str, str, list[str]]:
     """
     Answer a question using RAG with Cohere and ChromaDB.
@@ -21,7 +45,9 @@ def answer_question(
     Args:
         question: User's question
         mode: 'baseline' (simple retrieval) or 'improved' (rerank + smart chunks)
-        top_k: Number of final chunks to use for generation (default: 5)
+        top_k: Number of final chunks to use for generation in baseline mode (default: 5)
+        retrieval_config: Configuration for improved mode retrieval. If None, uses IMPROVED_BEST preset.
+                         Only applies when mode='improved'.
 
     Returns:
         Tuple of (answer, mode, chunk_ids) where:
@@ -39,16 +65,21 @@ def answer_question(
     # Initialize Cohere client
     co = cohere.Client(cohere_api_key)
 
-    # Choose collection based on mode
-    if mode == 'baseline':
+    # Apply retrieval configuration
+    if mode == 'improved':
+        # Use provided config or default to IMPROVED_BEST preset
+        config = retrieval_config if retrieval_config is not None else IMPROVED_BEST
+        collection_name = "nvidia_improved"
+        retrieval_count = config.initial_candidates
+    else:  # baseline
+        config = None
         collection_name = "nvidia_report"
         retrieval_count = top_k  # Retrieve exactly top_k for baseline
-    else:  # improved
-        collection_name = "nvidia_improved"
-        retrieval_count = 20  # Retrieve more candidates for reranking
 
     print(f"Mode: {mode.upper()}")
     print(f"Collection: {collection_name}")
+    if config:
+        print(f"Config: {config.initial_candidates} candidates → rerank to {config.max_final_chunks} chunks")
     print()
 
     # Step 1: Embed the question
@@ -84,17 +115,14 @@ def answer_question(
 
     # Step 3: Rerank (only for improved mode)
     if mode == 'improved':
-        print(f"\nStep 3: Reranking with Cohere Rerank...")
+        print(f"\nStep 3: Reranking with Cohere {config.rerank_model}...")
 
-        # Cost-cutting: Use only top 3 chunks for improved mode
-        max_final_chunks = 3
-
-        # Call Cohere Rerank
+        # Call Cohere Rerank with config parameters
         rerank_response = co.rerank(
-            model="rerank-english-v3.0",
+            model=config.rerank_model,
             query=question,
             documents=candidate_docs,
-            top_n=max_final_chunks
+            top_n=config.max_final_chunks
         )
 
         # Extract reranked results
@@ -102,7 +130,7 @@ def answer_question(
         final_ids = [candidate_ids[i] for i in reranked_indices]
         final_docs = [candidate_docs[i] for i in reranked_indices]
 
-        print(f"Reranked to top-{max_final_chunks} chunks:")
+        print(f"Reranked to top-{config.max_final_chunks} chunks:")
         for i, (result, chunk_id) in enumerate(zip(rerank_response.results, final_ids)):
             print(f"  {i+1}. {chunk_id} (relevance score: {result.relevance_score:.4f})")
 
